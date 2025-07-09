@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Application Details</title>
+  <link rel="stylesheet" href="../static/Css/Postnewjob.css">
+  <link rel="stylesheet" href="../static/Css/ViewApplication.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<style>
+  .card {
+    position: relative;
+    max-width: 608px;
+    width: 100%;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  .card .btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: rgb(134, 131, 185);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+  }
+
+  .detail-row strong {
+    flex: 3;
+    text-align: left;
+    position: relative;
+  }
+
+  .detail-row strong::after {
+    content: ":";
+    position: absolute;
+    right: 0;
+    padding-right: 5px;
+  }
+
+  .detail-row span {
+    flex: 2;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: space-between;
+    /* Distributes buttons evenly */
+    gap: 10px;
+
+    margin-top: 10px;
+  }
+
+  .action-btn {
+    flex: 1;
+    padding: 10px;
+    background-color: rgb(134, 131, 185);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    /* Prevents text from wrapping */
+  }
+
+  .action-btn:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+
+  .skill-match-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    /* Start hidden */
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow: auto;
+  }
+
+  .skill-match-modal-content {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 450px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+    margin: 20px;
+    text-align: left;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease;
+  }
+
+  .close-button:hover {
+    color: #ff4444;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .skill-match-modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #2c3e50;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+
+  #skillMatchResult {
+    margin-bottom: 20px;
+  }
+
+  .skill-match-modal-content p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+  }
+
+  .skill-match-modal-content p strong {
+    color: #2c3e50;
+    margin-right: 10px;
+  }
+
+  #cancelSkillButton {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  #cancelSkillButton:hover {
+    background-color: #2980b9;
+  }
+
+  #atsScanBtn {
+    background-color: rgb(134, 131, 185);
+  }
+
+  #atsScanBtn:hover {
+    background-color:#0056b3;
+  }
+
+  @media (max-width: 480px) {
+    .skill-match-modal-content {
+      width: 85%;
+      padding: 15px;
+    }
+
+    .skill-match-modal-content h2 {
+      font-size: 20px;
+    }
+
+    .skill-match-modal-content p {
+      font-size: 14px;
+    }
+
+    #cancelSkillButton {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  }
+</style>
+<body style="background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42));background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; ">
+  {% include 'Navbar.html' %}
+  <div class="card" style="  background: linear-gradient(135deg, #fef6ff, #e3f1ff);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        padding: 2rem;
+        transition: 0.3s ease;
+        border-radius: 23px;">
+    <div id="details-container">
+      <div class="header-content">
+        <div class="action-icons" style="display: flex; justify-content: space-between; align-items: center;">
+          <i class="fas fa-times action-icon icon-cancel" data-tooltip="Cancel" onclick="handleCancel()"
+            style="margin-left: -90px;"></i>
+          <i class="fas fa-trash action-icon icon-delete" data-tooltip="Delete" style="margin-right: -90px;"
+            onclick="confirmDelete('{{ application_data._id }}')"></i>
+        </div>
+        <h2>{{ application_data.job_title }}</h2>
+      </div>
+      <div class="detail-row"><strong>First Name</strong> <span>{{ application_data.first_name }}</span></div>
+      <div class="detail-row"><strong>Last Name</strong> <span>{{ application_data.last_name }}</span></div>
+      <div class="detail-row"><strong>Email</strong> <span>{{ application_data.email }}</span></div>
+      <div class="detail-row"><strong>Phone</strong> <span>{{ application_data.mobile }}</span></div>
+
+      {% if application_data.current_employee == "yes" %}
+
+      <div class="detail-row"><strong>Company Name</strong> <span>{{ application_data.company_name }}</span></div>
+      <div class="detail-row"><strong>Company Location</strong> <span>{{ application_data.company_location }}</span>
+
+      </div>
+      <div class="detail-row"><strong>Experience</strong> <span>{{ application_data.experience}}</span></div>
+      <div class="detail-row"><strong>Current CTC</strong> <span>{{ application_data.current_ctc }}</span></div>
+      <div class="detail-row"><strong>Expected CTC</strong> <span>{{ application_data.expected_ctc }}</span></div>
+      <div class="detail-row"><strong>Notice Period</strong> <span>{{ application_data.notice_period }}</span></div>
+      {% else %}
+
+      <p>This candidate doesn't have any experience.</p>
+      {% endif %}
+    </div>
+
+    <div class="button-row">
+      <button class="action-btn" id="rejectApplicationBtn" onclick="openModal(event)">Reject Application ❌</button>
+      <button class="action-btn" id="scheduleInterviewBtn" onclick="openModal(event)">Schedule Interview 📆</button>
+    </div>
+    <div class="button-group" style="display: flex; gap: 10px;">
+      <a class="btn" id="viewResume" href="/viewResume/{{ application_data._id }}" target="_blank">View Resume 👁️</a>
+      <button class="btn" id="downloadResume" onclick="downloadResume('{{ application_data._id }}')">Download Resume
+        📥</button>
+      <button class="btn" id="atsScanBtn"
+        onclick="atsScanResume('{{ application_data._id }}', '{{ application_data.job_title }}')">AI Resume Scanner
+        🧠</button>
+    </div>
+  </div>
+
+    <!-- Skill Match Modal -->
+    <div id="skillMatchModal" class="skill-match-modal">
+      <div class="skill-match-modal-content">
+        <span class="close-button" onclick="closeSkillModal()">X</span>
+        <h2>ATS Scan Result</h2>
+        <div id="skillMatchResult">
+          <p><strong>Job Title :</strong> <span id="skillMatchJobTitle"></span></p>
+          <p><strong>Candidate Email :</strong> <span id="skillMatchEmail"></span></p>
+          <p><strong>Match Percentage :</strong> <span id="skillMatchPercentage"></span>%</p>
+          <p><strong>Matched Skills :</strong> <span id="matchedSkills"></span></p>
+          <p><strong>Missing Skills :</strong> <span id="missingSkills"></span></p>
+          <p><strong>ATS Score :</strong> <span id="atsScore"></span>%</p>
+        </div>
+        <button id="cancelSkillButton" onclick="closeSkillModal()">Close</button>
+      </div>
+    </div>
+
+    <!-- Existing Modal for Scheduling Interview or Rejecting Application -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <form id="meetingForm" class="job-form">
+          <h2 id="modalTitle">Schedule Meeting</h2>
+          <label for="to">To:</label>
+          <input type="email" id="to" name="to" readonly><br><br>
+          <div id="scheduleFields">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required><br><br>
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required><br><br>
+          </div>
+          <div id="rejectFields" style="display: none;">
+            <label for="reason">Reason:</label>
+            <select id="reason" required>
+              <option value="">Select Reason</option>
+              <option value="Profile does not match">Profile does not match</option>
+              <option value="Experience not sufficient">Experience not sufficient</option>
+              <option value="Position filled">Position filled</option>
+              <option value="Poor communication skills">Poor communication skills</option>
+              <option value="No response from candidate">No response from candidate</option>
+              <option value="Offer declined by candidate">Offer declined by candidate</option>
+            </select><br><br>
+          </div>
+          <button type="submit" class="btn" id="modalActionButton">Send Invite</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Validate token
+    function validateToken() {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        alert("Unauthorized access. Please log in.");
+        window.location.href = "/login";
+      }
+    }
+
+    // Download resume
+    function downloadResume(applicationId) {
+      window.location.href = `/downloadResume/${applicationId}`;
+    }
+
+    // Open modal for scheduling or rejecting
+    function openModal(event) {
+      const buttonId = event.target.id;
+      const modal = document.getElementById("myModal");
+      const modalTitle = document.getElementById("modalTitle");
+      const scheduleFields = document.getElementById("scheduleFields");
+      const rejectFields = document.getElementById("rejectFields");
+      const actionButton = document.getElementById("modalActionButton");
+
+      document.getElementById('to').value = '{{ application_data.email }}';
+
+      if (buttonId === "scheduleInterviewBtn") {
+        modalTitle.innerText = "Schedule Interview";
+        scheduleFields.style.display = "block";
+        rejectFields.style.display = "none";
+        actionButton.innerText = "Send Invite";
+        actionButton.onclick = function () { scheduleInterview(buttonId); };
+      } else if (buttonId === "rejectApplicationBtn") {
+        modalTitle.innerText = "Reject Application";
+        scheduleFields.style.display = "none";
+        rejectFields.style.display = "block";
+        actionButton.innerText = "Send";
+        actionButton.onclick = function () { rejectApplication(buttonId); };
+      }
+
+      modal.style.display = "block";
+      setMinDateTime();
+    }
+
+    // Set minimum date and time
+    function setMinDateTime() {
+      const dateInput = document.getElementById("date");
+      const timeInput = document.getElementById("time");
+      const today = new Date().toISOString().split("T")[0];
+      dateInput.setAttribute("min", today);
+
+      dateInput.addEventListener("change", function () {
+        const selectedDate = new Date(dateInput.value);
+        const now = new Date();
+        if (selectedDate.toDateString() === now.toDateString()) {
+          const currentTime = now.toTimeString().slice(0, 5);
+          timeInput.setAttribute("min", currentTime);
+        } else {
+          timeInput.removeAttribute("min");
+        }
+      });
+    }
+
+    // Schedule interview
+    async function scheduleInterview(buttonId) {
+      const mail = document.getElementById("to").value;
+      const date = document.getElementById("date").value;
+      const time = document.getElementById("time").value;
+
+      if (!validateDateTime(date, time)) return;
+
+      const object = { action: buttonId, to: mail, date: date, time: time };
+      try {
+        const response = await fetch("/scheduleInterview", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+          },
+          body: JSON.stringify(object)
+        });
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+          closeModal();
+        } else {
+          alert("Failed to send request");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Something went wrong! Please try again.");
+      }
+    }
+
+    // Reject application
+    async function rejectApplication(buttonId) {
+      const mail = document.getElementById("to").value;
+      const reason = document.getElementById("reason").value;
+
+      const object = { action: buttonId, to: mail, reason: reason };
+      try {
+        const response = await fetch("/scheduleInterview", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+          },
+          body: JSON.stringify(object)
+        });
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+          closeModal();
+        } else {
+          alert("Failed to send request");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Something went wrong! Please try again.");
+      }
+    }
+
+    // Validate date and time
+    function validateDateTime(date, time) {
+      const selectedDateTime = new Date(`${date}T${time}`);
+      const now = new Date();
+      if (selectedDateTime < now) {
+        alert("Please select a valid future date and time.");
+        return false;
+      }
+      return true;
+    }
+
+    // Handle cancel (header icon)
+    function handleCancel() {
+      try {
+        console.log("Cancel clicked");
+        window.location.href = "/viewApplications";
+      } catch (err) {
+        console.error("Cancel redirection error:", err);
+        alert("Failed to redirect to applications page. Please try again.");
+      }
+    }
+
+    // Confirm delete
+    async function confirmDelete(applicationId) {
+      if (!confirm("Are you sure you want to delete this application? This action cannot be undone.")) return;
+      try {
+        const response = await fetch(`/deleteApplication/${applicationId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+          }
+        });
+        if (response.ok) {
+          alert("Application deleted successfully");
+          window.location.href = "/viewApplications";
+        } else {
+          const error = await response.json();
+          alert(`Failed to delete application: ${error.detail || "Unknown error"}`);
+        }
+      } catch (error) {
+        console.error("Delete error:", error);
+        alert("Failed to delete application. Please try again.");
+      }
+    }
+
+    // ATS scan resume
+    async function atsScanResume(applicationId, jobTitle) {
+      try {
+        const modal = document.getElementById('skillMatchModal');
+        const resultContainer = document.getElementById('skillMatchResult');
+        modal.style.display = 'flex'; // Show modal immediately
+
+        const response = await fetch(`/compareSkills/${applicationId}/${encodeURIComponent(jobTitle)}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById('skillMatchJobTitle').textContent = data.job_title || 'N/A';
+          document.getElementById('skillMatchEmail').textContent = data.email || 'N/A';
+          document.getElementById('skillMatchPercentage').textContent = data.skill_match_percentage?.toFixed(2) || '0.00';
+          document.getElementById('matchedSkills').textContent = data.matched_skills?.length ? data.matched_skills.join(', ') : 'None';
+          document.getElementById('missingSkills').textContent = data.missing_skills?.length ? data.missing_skills.join(', ') : 'None';
+          document.getElementById('atsScore').textContent = data.ats_score?.toFixed(2) || '0.00';
+        } else {
+          resultContainer.innerHTML = `<p style="color: red;">Error: ${data.error || 'Failed to scan resume'}</p>`;
+        }
+      } catch (err) {
+        console.error('ATS Scan Error:', err);
+        resultContainer.innerHTML = '<p style="color: red;">Something went wrong while fetching ATS results.</p>';
+      }
+    }
+
+    // Close modals
+    function closeModal() {
+      const modal = document.getElementById('myModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function closeSkillModal() {
+      const modal = document.getElementById('skillMatchModal');
+      if (modal) {
+        modal.style.display = 'none';
+        console.log('Skill modal closed');
+      } else {
+        console.error('Skill Match Modal not found');
+        alert('Error: Unable to close modal.');
+      }
+    }
+
+    // Close modals on outside click
+    window.onclick = function (event) {
+      const modal = document.getElementById('myModal');
+      const skillModal = document.getElementById('skillMatchModal');
+      if (event.target === modal) modal.style.display = 'none';
+      if (event.target === skillModal) skillModal.style.display = 'none';
+    }
+  </script>
+</body>
+
+
+</html>

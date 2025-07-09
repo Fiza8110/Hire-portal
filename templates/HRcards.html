@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applications</title>
+  <link rel="stylesheet" href="../static/Css/Dashboard.css">
+</head>
+<style>
+  .job-detail-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .job-detail-modal-content {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 450px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .job-detail-modal-content p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .job-detail-modal-content h2 {
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #2c3e50;
+  }
+
+  #cancelButton {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #cancelButton:hover {
+    background-color: #2980b9;
+  }
+</style>
+
+<body style="background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42)); background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;">
+  {% include 'Navbar.html' %}
+
+  <div id="card-container">
+    {% for item in applications_list %}
+    <div class="card"  style="background: linear-gradient(135deg, #fef6ff, #e3f1ff); background-repeat: no-repeat;background-attachment: fixed;background-size: cover;
+" >
+      <h2 class="job-title" data-job-title="{{ item.job_title }}" style="cursor: pointer;">{{ item.job_title }}</h2>
+
+      <p><strong>Name:</strong> {{ item.first_name }} {{ item.last_name }}</p>
+      <p><strong>Email:</strong> {{ item.email }}</p>
+      <p><strong>Experience: </strong> {{ item.experience }}</p>
+      <button class="apply-btn" onclick="window.location.href='/viewDetails/{{ item._id }}'">View Details</button>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="jobModal" class="job-detail-modal" style="display:none;">
+    <div class="job-detail-modal-content">
+      <span class="close-button" id="closeModal">&times;</span>
+      <h2 id="modalJobTitle" style="color: #5a3ea1;"></h2>
+      <p><strong>Job Description:</strong> <span id="modalDescription"></span></p>
+       <p><strong>Skills:</strong> <span id="modalSkills"></span></p>
+       <p><strong>Experience:</strong> <span id="modalExperience"></span></p>
+      <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+      
+    </div>
+  </div>
+
+  <script>
+    validateToken();
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchInput = document.getElementById('search-bar');
+      const applicationCards = document.querySelectorAll('.card');
+      const noResultsMessage = document.getElementById('no-results-message');
+
+      searchInput.addEventListener('input', function () {
+        const query = searchInput.value.toLowerCase();
+        let resultsFound = false;
+
+        applicationCards.forEach(card => {
+          const jobTitle = card.querySelector('h2').textContent.toLowerCase();
+          const firstName = card.querySelector('p').textContent.toLowerCase();
+          const email = card.querySelectorAll('p')[1].textContent.toLowerCase();
+
+          if (jobTitle.includes(query) || firstName.includes(query) || email.includes(query)) {
+            card.style.display = '';
+            resultsFound = true;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (resultsFound) {
+          noResultsMessage.style.display = 'none';
+        } else {
+          noResultsMessage.style.display = 'block';
+        }
+      });
+    });
+
+    async function validateToken() {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        alert("Unauthorized access. Please log in.");
+        window.location.href = "/login";
+      }
+    }
+
+    const searchBar = document.getElementById("search-bar");
+    if (searchBar) {
+      searchBar.addEventListener("input", () => {
+        const query = searchBar.value.toLowerCase();
+        const cards = document.querySelectorAll(".card");
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const text = card.innerText.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = "block";
+            visibleCount++;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        const noResultsDiv = document.getElementById("no-results");
+        if (visibleCount === 0) {
+          noResultsDiv.style.display = "block";
+        } else {
+          noResultsDiv.style.display = "none";
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const jobTitles = document.querySelectorAll('.job-title');
+      const modal = document.querySelector('.job-detail-modal');
+      const closeModal = document.getElementById('closeModal');
+      const cancelButton = document.getElementById('cancelButton');
+
+      const modalJobTitle = document.getElementById('modalJobTitle');
+      const modalLocation = document.getElementById('modalLocation');
+      const modalExperience = document.getElementById('modalExperience');
+      const modalSkills = document.getElementById('modalSkills');
+      const modalDescription = document.getElementById('modalDescription');
+
+      jobTitles.forEach(title => {
+        title.addEventListener('click', async () => {
+          const jobTitle = title.getAttribute('data-job-title');
+
+          if (!jobTitle || jobTitle.trim() === '') {
+            alert('Invalid job title.');
+            return;
+          }
+
+          try {
+            const response = await fetch(`/getJobDetailsByTitle/${encodeURIComponent(jobTitle)}`);
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Fetched Job Data:', data);
+
+            if (!data.error && data.job_title && data.job_title !== 'No title') {
+              modalJobTitle.textContent = data.job_title;
+              modalLocation.textContent = data.location;
+              modalExperience.textContent = data.experience;
+              modalSkills.textContent = data.skills;
+              modalDescription.textContent = data.description;
+
+              modal.style.display = 'flex';
+            } else {
+              alert('Job details not found!');
+            }
+
+          } catch (error) {
+            console.error('Error fetching job details:', error);
+            alert('Error fetching job details.');
+          }
+        });
+      });
+
+      closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      cancelButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

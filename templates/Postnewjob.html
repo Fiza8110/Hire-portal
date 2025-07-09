@@ -1,0 +1,157 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post New Job</title>
+    <link rel="stylesheet" href="../static/Css/Postnewjob.css">
+
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .job-container {
+        width: 50%;
+        margin: auto;
+        padding: 2rem;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 2rem;
+
+
+    }
+
+    .job-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 0.8rem;
+        font-size: 1rem;
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        background-color: rgb(134, 131, 185);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .job-container {
+        background: linear-gradient(135deg, #fef6ff, #e3f1ff);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        transition: 0.3s ease;
+        width: 50%;
+        margin: auto;
+        margin-top: 2rem;
+    }
+
+    body {
+        background: linear-gradient(to bottom right,
+                #EDE7F6,
+                #D1C4E9,
+                rgba(248, 187, 208, 0.42),
+                rgba(255, 224, 224, 0.42));
+    }
+</style>
+
+<body style="background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42)); background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;">
+    <main>
+        {% include 'Navbar.html' %}
+        <div class="job-container" , style=" width: 50%;">
+            <h2 style="text-align: center; color: #5a3ea1;">Post New Job📝</h2>
+            <form class="job-form" onsubmit="postJob(event)">
+                <div class="form-group">
+                    <label for="jobTitle">Job Title <span style="color: red;">*</span></label>
+                    <input type="text" id="Job_Title" name="jobTitle" placeholder="Enter job title" required>
+                </div>
+                <div class="form-group">
+                    <label for="jobDescription">Job Description <span style="color: red;">*</span></label>
+                    <textarea id="Job_Description" name="jobDescription" placeholder="Describe the job" rows="4"
+                        required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="yearsOfExperience">Years of Experience <span style="color: red;">*</span></label>
+                    <input type="number" id="Experience" name="yearsOfExperience"
+                        placeholder="Enter years of experience" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">Skills <span style="color: red;">*</span></label>
+                    <input list="skillsOptions" id="Skills" name="skills"
+                        placeholder="Type or choose skills (comma-separated)" required>
+                    <datalist id="skillsOptions">
+                        <option value="JavaScript">
+                        <option value="HTML">
+                        <option value="CSS">
+                        <option value="React">
+                        <option value="Node.js">
+                    </datalist>
+                    <small>Separate multiple skills with commas (e.g., HTML, CSS, MySQL)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location <span style="color: red;">*</span></label>
+                    <select id="Location" name="location" required>
+                        <option value="">Select location</option>
+                        <option value="Bengaluru">Bengaluru</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Dubai">Dubai</option>
+                        <option value="Tirupati">Tirupati</option>
+                        <option value="USA">USA</option>
+                        <option value="Delhi">Delhi</option>
+
+                    </select>
+                </div>
+
+                <button type="submit" style="border-radius: 15px;">Post Job</button>
+            </form>
+
+        </div>
+    </main>
+</body>
+<script src="../static/JavaScript/Postnewjob.js"></script>
+<script src="../static/JavaScript/Script.js"></script>
+
+</html>

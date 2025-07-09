@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Form</title>
+    <link rel="stylesheet" href="../static/Css/JobApply.css">
+</head>
+<style>
+    .form {
+        max-width: 700px;
+        margin: 30px auto;
+        padding: 30px;
+        background: linear-gradient(135deg, #fef6ff, #e3f1ff);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        border-radius: 16px;
+        padding: 3rem;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+
+
+    }
+</style>
+
+<body style="background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42)); background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;">
+    {% include 'Navbar.html' %}
+    <!-- </header> -->
+    <main>
+        <form class="form" action="/applyJob" method="post" enctype="multipart/form-data">
+              <h2 style="color:  #5a3ea1; text-align: center;">Apply Job ✍️</h2>
+
+            <div class="form-group">
+                <label for="jobTitle">Job Title <span style="color: red;">*</span></label>
+                <input type="text" id="jobTitle" name="jobTitle" readonly disabled>
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name <span style="color: red;">*</span></label>
+                <input type="text" id="firstName" name="firstName" placeholder="First Name" required
+                    pattern="^[A-Za-z._-]+$" title="Only letters, ( - ), ( _ ) ,( . ) are allowed">
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name <span style="color: red;">*</span></label>
+                <input type="text" id="lastName" name="lastName" placeholder="Last Name" required
+                    pattern="^[A-Za-z._-]+$" title="Only letters, ( - ), ( _ ) ,( . ) are allowed">
+            </div>
+            <div class="form-group">
+                <label for="email">Email <span style="color: red;">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Email" disabled readonly>
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile No <span style="color: red;">*</span></label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Mobile Number" pattern="[0-9]{10}" required>
+            </div>
+            <div class="form-group">
+                <label for="resume">Resume <span style="color: red;">*</span></label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+            </div>
+            <div class="form-group">
+                <button type="button" onclick="parseResume()">Auto-Fill from Resume</button>
+            </div>
+
+            <div class="form-group">
+                <label>Experienced ? <span style="color: red;">*</span></label>
+                <div id="currentEmployee">
+                    <label><input type="radio" name="employed" value="yes" required
+                            onclick="toggleEmploymentFields(true)"> Yes</label>
+                    <label><input type="radio" name="employed" value="no" required
+                            onclick="toggleEmploymentFields(false)"> No</label>
+                </div>
+            </div>
+
+            <div id="employmentDetails" style="display: none;">
+                <div class="form-group">
+                    <label for="companyName">Company Name <span style="color: red;">*</span></label>
+                    <input type="text" id="companyName" name="companyName" placeholder="Company Name">
+                </div>
+                <div class="form-group">
+                    <label for="companyLocation">Company Location <span style="color: red;">*</span></label>
+                    <input type="text" id="companyLocation" name="companyLocation" placeholder="Company Location">
+                </div>
+                <div class="form-group">
+                    <label for="experience">Experience <span style="color: red;">*</span></label>
+                    <input type="number" id="experience" name="experience" placeholder="Experience" min="0" step="1"
+                        oninput="this.value = this.value.replace(/[^1-9]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label for="currentCTC">Current CTC <span style="color: red;">*</span></label>
+                    <input type="number" id="currentCTC" name="currentCTC" placeholder="Current CTC" min="0" step="1"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label for="expectedCTC">Expected CTC <span style="color: red;">*</span></label>
+                    <input type="number" id="expectedCTC" name="expectedCTC" placeholder="Expected CTC" min="0" step="1"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                <div class="form-group">
+                    <label for="noticePeriod">Notice Period (in days) <span style="color: red;">*</span></label>
+                    <input type="number" id="noticePeriod" name="noticePeriod" placeholder="Notice Period" min="0"
+                        step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+
+            </div>
+
+            <button type="submit" id="modalActionButton" onclick="ApplyJob(event)">APPLY</button>
+            <button type="button" id="cancelButton" onclick="window.location.href='/dashboard'">Cancel</button>
+        </form>
+    </main>
+
+    <!-- <script src="../static/JavaScript/JobApply.js"></script> -->
+    <script>
+        validateToken()
+        const selectedJobTitle = localStorage.getItem("selectedJobTitle");
+        if (selectedJobTitle) {
+            document.getElementById("jobTitle").value = selectedJobTitle;
+        }
+        const selectedEmail = localStorage.getItem("email");
+        if (selectedEmail) {
+            document.getElementById("email").value = selectedEmail;
+        }
+
+        function toggleEmploymentFields(isEmployed) {
+            document.getElementById("employmentDetails").style.display = isEmployed ? "block" : "none";
+        }
+
+        async function ApplyJob(event) {
+            event.preventDefault(); // Prevent page reload
+
+            const formData = new FormData(); 
+
+            formData.append("job_title", document.getElementById("jobTitle").value);
+            formData.append("first_name", document.getElementById("firstName").value);
+            formData.append("last_name", document.getElementById("lastName").value);
+            formData.append("email", document.getElementById("email").value);
+            formData.append("mobile", document.getElementById("mobile").value);
+            formData.append("current_employee", document.querySelector('input[name="employed"]:checked').value);
+            formData.append("applied_on", new Date().toISOString());
+            formData.append("status", "");
+
+            // Ensure resume is selected and appended
+            const resumeFile = document.getElementById("resume").files[0];
+            if (resumeFile) {
+                formData.append("resume", resumeFile);
+            } else {
+                alert("No resume selected");
+            }
+
+            // If user is employed, send additional details
+            if (document.querySelector('input[name="employed"]:checked').value === "yes") {
+                formData.append("company_name", document.getElementById("companyName").value);
+                formData.append("company_location", document.getElementById("companyLocation").value);
+                formData.append("current_ctc", document.getElementById("currentCTC").value);
+                formData.append("expected_ctc", document.getElementById("expectedCTC").value);
+                formData.append("experience", document.getElementById("experience").value);
+                formData.append("notice_period", document.getElementById("noticePeriod").value);
+            }
+
+            // Log FormData content manually
+            let formDataObject = {};
+            formData.forEach((value, key) => {
+                if (value instanceof File) {
+                    formDataObject[key] = value.name; // Show only the file name, or metadata if needed
+                } else {
+                    formDataObject[key] = value;
+                }
+            });
+            alert("Form Data:", formData); // Debugging, replace with actual form submission logic
+
+
+            try {
+                const response = await fetch("/applyJob", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    console.log("Success:", data);
+                    alert("Application Submitted Successfully!");
+                    window.location.href = "/dashboard"
+                } else {
+                    console.log("Form Data:", formDataObject);
+
+                }
+
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to Submit Application");
+            }
+        }
+
+
+        async function validateToken() {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                alert("Unauthorized access. Please log in.");
+                window.location.href = "/login";
+
+            }
+        }
+        const nameFields = ["firstName", "lastName"];
+        nameFields.forEach(id => {
+            document.getElementById(id).addEventListener("input", function () {
+                this.value = this.value.replace(/[^a-zA-Z._-]/g, "");
+            });
+        });
+        async function parseResume() {
+            const resumeFile = document.getElementById("resume").files[0];
+            if (!resumeFile) {
+                alert("Please upload a resume first.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("resume", resumeFile);
+
+            try {
+                const res = await fetch("/parse-resume", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (data.parsed) {
+                    const fields = data.parsed;
+                    if (fields.first_name) document.getElementById("firstName").value = fields.first_name;
+                    if (fields.last_name) document.getElementById("lastName").value = fields.last_name;
+                    if (fields.mobile) document.getElementById("mobile").value = fields.mobile;
+                    if (fields.company_name) document.getElementById("companyName").value = fields.company_name;
+                    if (fields.company_location) document.getElementById("companyLocation").value = fields.company_location;
+                    if (fields.experience) {
+                        document.getElementById("experience").value = fields.experience;
+                        document.querySelector('input[name="employed"][value="yes"]').checked = true;
+                        toggleEmploymentFields(true);
+                    }
+                } else {
+                    alert("Could not extract data from resume.");
+                }
+            } catch (err) {
+                console.error("Parsing failed:", err);
+                alert("Error parsing resume");
+            }
+        }
+
+    </script>
+</body>
+
+</html>

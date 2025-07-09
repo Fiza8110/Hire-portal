@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Responsive Navbar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .search-container {
+      position: relative;
+      width: 250px;
+    }
+
+    .search-container input {
+      width: 80%;
+      height: 40px;
+      padding-left: 20px;
+      font-family: Poppins;
+      font-weight: 400;
+      font-size: 14px;
+      color: black;
+    }
+
+    .search-container .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      transform: translateY(-50%);
+      color: gray;
+      pointer-events: none;
+      margin-left: 120px;
+    }
+
+    nav.navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: white;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      padding-top: 70px;
+      overflow-x: hidden;
+    }
+
+    .nav-item .nav-link {
+      border-radius: 25px;
+      padding: 10px 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .navbar-nav .nav-item:not(:last-child) {
+      margin-right: 15px;
+    }
+
+    .nav-item.active .nav-link {
+      background-color: rgb(134, 131, 185);
+      color: white;
+      border-radius: 20px;
+    }
+
+    .navbar-nav {
+      background-color: white;
+      border-radius: 20px;
+
+    }
+
+    .nav-item.active .nav-link:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+      color: white;
+    }
+
+
+    .nav-item.active .nav-link {
+      background-color: rgb(134, 131, 185);
+      color: white;
+      border-radius: 20px;
+    }
+
+
+    .typing-loader {
+      display: flex;
+      gap: 4px;
+      margin-top: 5px;
+      align-items: center;
+      padding-left: 5px;
+    }
+
+    .typing-loader span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #888;
+      border-radius: 50%;
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    .typing-loader span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-loader span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0.9);
+        opacity: 0.3;
+      }
+
+      40% {
+        transform: scale(1.3);
+        opacity: 1;
+      }
+    }
+
+    .nav-item .nav-link:hover {
+      background-color: rgb(134, 131, 185);
+      color: white;
+      border-radius: 20px;
+    }
+
+    /* #recruitmentLink {
+      display: inline-block;
+      padding: 8px 15px;
+      background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42));;
+      border: 1px solid grey;
+      border-radius: 10px;
+      color: black;
+      font-weight: bold;
+      font-size: 18px;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    #recruitmentLink:hover {
+      background-color: #e2e6ea;
+      color: #084298;
+    } */
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 80px;">
+    <div class="container-fluid">
+      <a class="navbar-brand" id="recruitmentLink" >Recruitment Portal 🧑‍💻</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navItems"
+          style="background-color: #EDE7F6;">
+          <!-- Nav items will be dynamically inserted here -->
+        </ul>
+
+        <!-- Search Container -->
+        <div class="search-container" id="searchContainer" style="display: none;">
+          <input id="search-bar" type="text" class="form-control" placeholder="Search" style="margin-left: -38px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-search search-icon" viewBox="0 0 16 16">
+            <path
+              d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0">
+            </path>
+          </svg>
+
+          <div id="no-results" style="display:none; color: red; margin-top: 5px; font-weight: bold; font-size: 14px;">
+            No Result Found
+          </div>
+        </div>
+        <!-- AI Chatbot Button -->
+        <button class="btn btn-primary d-flex align-items-center me-2" data-bs-toggle="modal"
+          data-bs-target="#chatbotModal" style="background-color: rgb(134, 131, 185); color:white">
+          <i class="bi bi-robot me-1"></i> Ask AI
+        </button>
+
+
+        <button class="btn btn-danger d-flex align-items-center ms-3" onclick="logout()">
+          <i class="bi bi-box-arrow-right me-1"></i> Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const navItems = document.getElementById("navItems");
+      const role = localStorage.getItem("role");
+
+      let navLinks = "";
+
+      if (role === "user") {
+        navLinks = `
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">
+              <i class="bi bi-house-door"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/candidateApplications">
+              <i class="bi bi-person-check"></i> Show Candidate Status
+            </a>
+          </li>
+        `;
+      } else {
+        navLinks = `
+          <li class="nav-item">
+            <a class="nav-link" href="/viewApplications">
+              <i class="bi bi-eye"></i> View Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/postnewjob">
+              <i class="bi bi-plus-circle"></i> Post Job
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/joblist">
+              <i class="bi bi-list-ul"></i> Job List
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/add-candidate">
+              <i class="bi bi-person-plus"></i> Add Candidate
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/listCandidates">
+              <i class="bi bi-people"></i> Candidates
+            </a>
+          </li>
+        `;
+      }
+
+      if (navItems) {
+        navItems.innerHTML = navLinks;
+
+        setTimeout(() => {
+          const navLinksElements = document.querySelectorAll(".nav-item .nav-link");
+          const currentPath = window.location.pathname;
+          const recruitmentLink = document.getElementById("recruitmentLink");
+
+          if (currentPath === "/hrDashboard" && recruitmentLink) {
+            recruitmentLink.classList.add("active");
+          }
+
+          navLinksElements.forEach(link => {
+            const href = link.getAttribute('href');
+
+            const isActive =
+              currentPath === href ||
+              (currentPath.startsWith("/viewDetails") && href === "/viewApplications") ||
+              (role === "user" && currentPath.startsWith("/applayJob") && href === "/dashboard") ||
+              (currentPath === "/listCandidates" && href === "/listCandidates");
+
+            if (isActive) {
+              link.parentElement.classList.add("active");
+            }
+
+            link.addEventListener("click", function () {
+              navLinksElements.forEach(item => item.parentElement.classList.remove("active"));
+              link.parentElement.classList.add("active");
+            });
+          });
+
+          // Show search bar only on selected paths
+          const searchContainer = document.getElementById("searchContainer");
+          const visiblePaths = ["/dashboard", "/viewApplications", "/joblist", "/listCandidates"];
+          if (visiblePaths.includes(currentPath)) {
+            searchContainer.style.display = "block";
+          } else {
+            searchContainer.style.display = "none";
+          }
+
+        }, 50);
+      }
+    });
+
+    function logout() {
+      localStorage.clear();
+      location.replace("/login");
+    }
+    async function sendMessage() {
+      console.log("Sending message...");
+      const input = document.getElementById("chat-input");
+      const chatWindow = document.getElementById("chat-window");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+      chatWindow.innerHTML += `<div><strong>You:</strong> ${userMessage}</div>`;
+      const loaderId = "typing-loader";
+      chatWindow.innerHTML += `
+      <div id="${loaderId}" class="typing-loader">
+        <span></span><span></span><span></span>
+      </div>
+    `;
+      input.value = "";
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+      try {
+        const response = await fetch("/ask-ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: userMessage })
+        });
+        const data = await response.json();
+        const reply = data.reply || "⚠️ No reply.";
+        const loader = document.getElementById(loaderId);
+        if (loader) loader.remove();
+        chatWindow.innerHTML += `<div><strong>AI:</strong> ${reply}</div>`;
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      } catch (err) {
+        console.error("Fetch error:", err);
+        const loader = document.getElementById(loaderId);
+        if (loader) loader.remove();
+        chatWindow.innerHTML += `<div><strong>AI:</strong> ❌ Error contacting server.</div>`;
+      }
+    }
+
+  </script>
+  <div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: rgb(134, 131, 185); color: white;">
+          <h5 class="modal-title" id="chatbotModalLabel">🧠 AI Chatbot Assistant</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            style="color: white;"></button>
+        </div>
+        <div class="modal-body">
+          <div id="chat-window"
+            style="height: 300px; overflow-y: auto; background: #f9f9f9; padding: 10px; border-radius: 4px;">
+            <!-- Chat will appear here -->
+          </div>
+          <div id="chat-loader" style="display: none; text-align: center; margin-top: 10px;">
+            <div class="spinner-border text-secondary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <div style="font-size: 13px; color: gray;">AI is typing...</div>
+          </div>
+          <div class="input-group mt-3">
+            <input type="text" id="chat-input" class="form-control" placeholder="Ask something...">
+            <button class="btn btn-success d-flex justify-content-center align-items-center"
+              style="width: 45px; height: 38px; background-color: rgb(134, 131, 185);" onclick="sendMessage()"
+              title="Send">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

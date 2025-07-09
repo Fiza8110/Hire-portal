@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Listings</title>
+  <!-- <link rel="stylesheet" href="/static/Css/Dashboard.css"> -->
+  <link rel="stylesheet" href="../static/Css/Dashboard.css">
+</head>
+
+<body style="background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42)); background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;">
+  {% include 'Navbar.html' %}
+  <!-- </header> -->
+  <main id="card-container">
+    {% for job in jobs_list %}
+    {% set title = job.Job_Title %}
+
+    <div class="card" style="background: linear-gradient(135deg, #fef6ff, #e3f1ff);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+
+">
+      {% if title in applied_job_titles %}
+      <div
+        style="color: green; font-weight: bold; text-align: right; box-shadow: 0 4px 12px rgba(0,0,0,0.05);border: 1px solid #e0e0e0; border-radius: 25px;  width: fit-content; background-color: #d4edda; padding: 8px 16px; margin-left: 150px; height: 35px;">
+        Applied</div>
+      {% endif %}
+      <h2>{{ job.Job_Title }}</h2>
+      <p>{{ job.Job_Description }}</p>
+      <p><strong>Skills:</strong> {{ job.Skills }}</p>
+      <p><strong>Location:</strong> {{ job.Location }}</p>
+      <button class="apply-btn" data-title="{{ job.Job_Title }}" {% if title in applied_job_titles %}disabled{% endif
+        %}>
+        {% if title in applied_job_titles %}Already Applied{% else %}Apply Now 🖱️{% endif %}
+      </button>
+    </div>
+    {% endfor %}
+  </main>
+
+
+  <script>
+    validateToken();//This runs immediately when the script loads 
+    // Handle "Apply Now" button click event
+    document.addEventListener("DOMContentLoaded", () => {//Ensures the code inside runs only after the HTML content has fully loaded.
+      document.querySelectorAll(".apply-btn").forEach((button) => {//Handles click events for buttons with the class .apply-btn.
+        button.addEventListener("click", (e) => {
+          const jobTitle = e.target.getAttribute("data-title");
+          localStorage.setItem("selectedJobTitle", jobTitle);
+          window.location.href = "/applayJob";
+        });
+      });
+
+      // Search functionality
+      const searchBar = document.getElementById("search-bar");
+      searchBar.addEventListener("input", () => {
+        const query = searchBar.value.toLowerCase();
+        document.querySelectorAll(".card").forEach((card) => {
+          const text = card.innerText.toLowerCase();
+          card.style.display = text.includes(query) ? "block" : "none";
+        });
+      });
+    });
+    //To check if the user is logged in by verifying if an access token is present in localStorage.
+    async function validateToken() {
+      const token = localStorage.getItem("access_token");//Retrieves the token from localStorage.
+      // alert(token);
+      if (!token) {
+        alert("Unauthorized access. Please log in.");
+        window.location.href = "/login";
+      }
+    }
+    const searchBar = document.getElementById("search-bar");
+    if (searchBar) {
+      searchBar.addEventListener("input", () => {
+        const query = searchBar.value.toLowerCase();
+        const cards = document.querySelectorAll(".card");
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const text = card.innerText.toLowerCase();
+          if (text.includes(query)) {
+            card.style.display = "block";
+            visibleCount++;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        const noResultsDiv = document.getElementById("no-results");
+        if (visibleCount === 0) {
+          noResultsDiv.style.display = "block";
+        } else {
+          noResultsDiv.style.display = "none";
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

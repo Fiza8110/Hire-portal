@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Job</title>
+  <link rel="stylesheet" href="../static/Css/Dashboard.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42));
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .card {
+      position: relative;
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      background: linear-gradient(135deg, #fef6ff, #e3f1ff);
+      background-repeat: no-repeat; 
+      background-attachment: fixed;
+      background-size: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #444;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #f7f9fc;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: #6c63ff;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1.4rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn.save {
+      background-color: rgb(134, 131, 185);
+      color: white;
+    }
+    .btn.save:hover {
+      background-color: #0056b3;
+      color: white;
+    }
+
+    
+
+    .btn.save:disabled {
+      background-color: rgb(134, 131, 185);
+      cursor: not-allowed;
+    }
+
+    .cancel-top-right {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: #e74c3c;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .cancel-top-right:hover {
+      background-color: #c0392b;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <button type="button" class="cancel-top-right" onclick="window.history.back()">X</button>
+    <h1 style="color: #5a3ea1;">Edit Job✍️</h1>
+    <form id="editJobForm">
+      <input type="hidden" name="job_id" value="{{ job._id }}" />
+
+      <div class="field">
+        <label for="Job_Title">Job Title :<span style="color: red;">*</span> </label>
+        <input type="text" name="Job_Title_display" value="{{ job.Job_Title }}" disabled />
+        <input type="hidden" name="Job_Title" value="{{ job.Job_Title }}" />
+      </div>
+
+      <div class="field">
+        <label for="Job_Description">Description: <span style="color: red;">*</span></label>
+        <textarea name="Job_Description" rows="4" required>{{ job.Job_Description }}</textarea>
+      </div>
+
+      <div class="field">
+        <label for="Skills">Skills: <span style="color: red;">*</span></label>
+        <input type="text" name="Skills" value="{{ job.Skills }}" required />
+      </div>
+
+      <div class="field">
+        <label for="Location">Location: <span style="color: red;">*</span></label>
+        <input type="text" name="Location" value="{{ job.Location }}" required />
+      </div>
+
+      <div class="field">
+        <label for="Experience">Experience: <span style="color: red;">*</span></label>
+        <input type="number" name="Experience" value="{{ job.Experience }}" required min="0" step="1"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn save" disabled>Save</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('editJobForm');
+    const saveButton = form.querySelector('.btn.save');
+
+    // Initially disable save button
+    saveButton.disabled = true;
+
+    // Select all editable inputs and textareas (exclude disabled ones)
+    const inputs = form.querySelectorAll('input:not([disabled]), textarea');
+
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        saveButton.disabled = false;
+      });
+    });
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      const response = await fetch(`/updateJob/${data.job_id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert("Job updated successfully!");
+        window.location.href = '/joblist';
+      } else {
+        alert("Failed to update job: " + result.detail);
+      }
+    });
+  </script>
+</body>
+
+</html>

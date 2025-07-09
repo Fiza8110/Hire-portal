@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Job Applications</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+       background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42));
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    h1 {
+      color: #222;
+      text-align: center;
+      margin-top: 60px;
+      font-size: 2rem;
+    }
+
+    table {
+      width: 80%;
+      max-width: 1000px;
+      margin: 40px auto;
+      border-collapse: separate;
+      /* Important: allow separate borders */
+      border-spacing: 0;
+      /* No space between cells */
+      background-color: #ffffff;
+      border-radius: 10px;
+      /* Rounded corners */
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border: 2px solid #333;
+      /* Visible outer border */
+      text-align: center;
+    }
+
+    
+    th,
+    td {
+      padding: 18px 22px;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+      border: 1px solid #999;
+      /* Medium-gray for visible cell lines */
+      border-color: white;
+      border-width: 3px;
+      border-style: solid;
+
+    }
+
+    th {
+      background-color: rgb(134, 131, 185);
+      color: white;
+    }
+
+    th {
+      background-color: rgb(134, 131, 185);
+      color: white;
+      font-size: 14px;
+      letter-spacing: 0.6px;
+      text-align: center;
+    }
+
+    td:last-child {
+      text-align: center;
+    }
+
+    .status {
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 30px;
+      display: inline-block;
+      font-size: 14px;
+      text-transform: capitalize;
+      white-space: nowrap;
+    }
+
+    .in-progress {
+      background-color: #ffc107;
+      color: #212529;
+    }
+
+    .interview {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .rejected {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .applied {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .pending {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    /* Zebra striping */
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    /* Mobile responsive view */
+    @media (max-width: 768px) {
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
+        display: block;
+
+      }
+
+      thead {
+        display: none;
+      }
+
+      tr {
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+
+      td {
+        padding: 12px 20px;
+        text-align: right;
+        position: relative;
+        border: none;
+        border-bottom: 1px solid #eee;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 20px;
+        top: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #555;
+      }
+
+      td:last-child {
+        text-align: right;
+        border-bottom: none;
+      }
+    }
+  </style>
+
+</head>
+
+<body >
+  {% include 'Navbar.html' %}
+  <h1 style="margin-top: 50px; color:#5a3ea1">My Job Applications👨‍💼</h1>
+  <table>
+    <thead >
+      <tr>
+        <th style="border-color: rgb(191, 186, 186); border-style: solid; border-width: 2px;">Job Title</th>
+        <th style="border-color: rgb(191, 186, 186); border-style: solid; border-width: 2px;">Date Applied</th>
+        <th style="border-color: rgb(191, 186, 186); border-style: solid; border-width: 2px;">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for app in applications %}
+      <tr>
+        <td style="border-color: rgb(191, 186, 186); border-style: solid; border-width: 1px;">{{ app.job_title }}</td>
+        <td style="border-color: rgb(191, 186, 186); border-style: solid; border-width: 1px;">{{ app.applied_on[:10] }}</td>
+        <td style="border-color: rgb(191, 186, 186); border-style: solid; border-width: 1px;">
+          <span class="status {{ app.status|lower|replace(' ', '-') | default('pending') }}">
+            {{ app.status | default("Pending") }}
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+
+</html>

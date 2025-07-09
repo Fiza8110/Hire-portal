@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup Page</title>
+  <link rel="stylesheet" href="../static/Css/Login.css">
+
+  <!-- reCAPTCHA Script -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<body>
+  <div class="login-container">
+    <h1>Sign Up🔐</h1>
+    <form id="signupForm" action="/register" method="post">
+      <input type="email" name="email" placeholder="Email Address" required>
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+      <!-- reCAPTCHA Widget -->
+      <div class="g-recaptcha" data-sitekey="6LfdEV0rAAAAAJJ0au8GnhGUnxA0k1mggRClcs0c"></div>
+
+      <button type="submit" style="margin-top: 20px;">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="/login">Login</a></p>
+  </div>
+
+  <script src="../static/JavaScript/Signup.js"></script>
+</body>
+
+</html>
