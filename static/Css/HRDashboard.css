@@ -1,0 +1,58 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  background-image: url('assets/hrbackg1.jpg');
+  /* Background image path */
+  background-size: cover;
+  /* Make the image cover the entire screen */
+  background-position: center;
+  /* Center the image */
+  background-repeat: no-repeat;
+}
+
+.dashboard-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 37px;
+}
+
+.dashboard-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 264px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-icon {
+  font-size: 32px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.card-number {
+  font-size: 26px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: #555;
+}

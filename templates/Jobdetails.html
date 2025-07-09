@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Details</title>
+  <link rel="stylesheet" href="../static/Css/Dashboard.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #EDE7F6, #D1C4E9, rgba(248, 187, 208, 0.42), rgba(255, 224, 224, 0.42));
+      display: flex;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .card {
+      position: relative;
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      background: linear-gradient(135deg, #fef6ff, #e3f1ff);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.4s ease-in-out;
+
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #444;
+    }
+    .card h1 {
+      color: #5a3ea1;
+    }
+
+    .field .value {
+      padding: 0.6rem;
+      border-radius: 6px;
+      background: #f7f9fc;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .btn-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: #e74c3c;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-close:hover {
+      background-color: #c0392b;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <button id="close-btn" class="btn-close">X</button>
+    <h1>Job Details🧾</h1>
+
+    <div class="field">
+      <label>Job Title:</label>
+      <div class="value">{{ job.Job_Title }}</div>
+    </div>
+
+    <div class="field">
+      <label>Description:
+      </label>
+      <div class="value">{{ job.Job_Description }}</div>
+    </div>
+
+    <div class="field">
+      <label>Skills:</label>
+      <div class="value">{{ job.Skills }}</div>
+    </div>
+
+    <div class="field">
+      <label>Location:</label>
+      <div class="value">{{ job.Location }}</div>
+    </div>
+
+    <div class="field">
+      <label>Experience Required:</label>
+      <div class="value">{{ job.Experience }}</div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('close-btn').addEventListener('click', () => {
+      history.back();
+    });
+  </script>
+</body>
+
+</html>

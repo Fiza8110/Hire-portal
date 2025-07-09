@@ -1,0 +1,262 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 20px;
+  /* background-image: url('assets/.png'); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 400px;
+  padding: 20px;
+  text-align: center;
+}
+
+.card h2 {
+  margin: 15px 0 5px;
+  color: #333;
+}
+
+.card p {
+  margin: 5px 0;
+  color: #777;
+  font-size: 14px;
+}
+
+.card .btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: rgb(134, 131, 185);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.card .btn:hover {
+  background-color: #0056b3;
+  color: white;
+}
+
+/* dialog styles */
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 50%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  /* background-color: rgb(0,0,0);
+background-color: rgba(0,0,0,0.4);  */
+}
+
+/* Modal Content */
+/* Modal Content - Centering it properly */
+.modal-content {
+  background-color: #fefefe;
+  padding: 23px;
+  border: 1px solid #888;
+  border-radius: 8px;
+  width: 40%;
+  max-width: 500px;
+  /* Ensures it doesn't get too large on big screens */
+  position: fixed; /* Centering */
+  /* Ensures it stays in the center even when scrolling */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: #aaaaaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color:red;
+  text-decoration: none;
+}
+
+
+button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: darkblue;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+input[type="email"],
+input[type="date"],
+input[type="time"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 7px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  /* Prevents extra width from padding */
+}
+
+/* Readonly input styling */
+input[readonly] {
+  background-color: #f0f0f0;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Hover & focus effect */
+input:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Label styling */
+label {
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* Styling for the select dropdown */
+select {
+  appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+#rejectFields {
+  margin-top: -20px;
+  /* Moves the reason field upwards */
+
+}
+
+#details-container {
+  max-width: 600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  /* border-bottom: 1px solid #ddd; */
+  padding: 8px 0;
+}
+
+.detail-row strong {
+  flex: 1;
+  text-align: left;
+}
+
+.detail-row span {
+  flex: 2;
+  text-align: left;
+}
+
+#modalActionButton {
+  background-color: rgb(134, 131, 185);
+  color: white;
+}
+
+#modalActionButton:hover {
+  background-color: #0056b3;
+  color: white;
+}
+/* Header Icons Container */
+.header-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Base Icon Styles */
+.icon-cancel, 
+.icon-delete {
+  font-size: 1.00rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+ 
+}
+
+/* Cancel Icon */
+.icon-cancel {
+  color:black;
+  background-color:white ; /* Rd */
+  border: 1px solid black;
+ 
+}
+/* Delete Icon */
+.icon-delete {
+  color: red;
+  background-color: white; /* Orange */
+  border: 1px solid #e64a19;
+ 
+}
+/* Tooltip Effects */
+.icon-cancel::after,
+.icon-delete::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  transform: translateX(50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.icon-cancel:hover::after,
+.icon-delete:hover::after {
+  opacity: 1;
+  visibility: visible;
+  margin-top: 5px;
+}

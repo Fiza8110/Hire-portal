@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HR Dashboard</title>
+  <link rel="stylesheet" href="/static/Css/HRDashboard.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+  {% include 'Navbar.html' %}
+  <main>
+    <div class="dashboard-container">
+      <h2 style="color: white;text-align: center;">Recruitment Analytics</h2>
+      <!-- Card container -->
+      <div class="card-container">
+        <div class="dashboard-card">
+          <i class="fas fa-users card-icon"></i>
+          <h3>Total Candidates</h3>
+          <p class="card-number">{{ total_candidates }}</p>
+          <p class="card-subtitle">Registered job seekers</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-user-shield card-icon"></i>
+          <h3>Total Admin Users</h3>
+          <p class="card-number">{{ total_users }}</p>
+          <p class="card-subtitle">Admin users logged in</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-briefcase card-icon"></i>
+          <h3>Job Postings</h3>
+          <p class="card-number">{{ total_jobs }}</p>
+          <p class="card-subtitle">Open and closed postings</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-file-alt card-icon"></i>
+          <h3>New Applications</h3>
+          <p class="card-number">{{ new_applications }}</p>
+          <p class="card-subtitle">Newly Applied</p>
+        </div>
+
+        <div class="dashboard-card">
+          <i class="fas fa-hourglass-half card-icon"></i>
+          <h3>Pending Approvals</h3>
+          <p class="card-number">{{ pending_approvals }}</p>
+          <p class="card-subtitle">Applications in progress</p>
+        </div>
+        <div class="dashboard-card rejected-card">
+          <i class="fas fa-user-times card-icon"></i>
+          <h3>Rejected Candidates</h3>
+          <p class="card-number">{{ rejected_applications }}</p>
+          <p class="card-subtitle">Applications Rejected</p>
+        </div>
+
+
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
